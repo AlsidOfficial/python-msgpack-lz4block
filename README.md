@@ -12,10 +12,11 @@ python setup.py install
 ```
 
 ## Usage
-```
->>> from msgpack_lz4block import deserialize
->>> serialized = b'\x92\xd4b\x0c\xc6\x00\x00\x00\r\xc0\x93c\xa4hoge\xa4huga'
->>> deserialize(serialized)
+```python
+from msgpack_lz4block import deserialize
+serialized = b'\x92\xd4b\x0c\xc6\x00\x00\x00\r\xc0\x93c\xa4hoge\xa4huga'
+deserialized = deserialize(serialized)
+print(deserialized)
 [99, 'hoge', 'huga']
 ```
 
