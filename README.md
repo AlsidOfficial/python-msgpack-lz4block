@@ -30,7 +30,7 @@ Lz4BlockArray compression.
 [99, 'hoge', 'huga']
 ```
 
-- We got the values... but we still miss the keys. The keys are not serialized in order to optimize the data usage. Hopefuly we can provide the key mapping as above, we get a beautyful key/value dict:
+- We got the values... but we still miss the keys. The keys are not serialized in order to optimize the data usage. We can provide the key mapping as above, we get a beautyful key/value dict:
 
 ```python
 >>> msgpack_lz4block.deserialize(b'\x92\xd4b\x0c\xc6\x00\x00\x00\r\xc0\x93c\xa4hoge\xa4huga', key_map=['Age', 'FistName', 'LastName'])
