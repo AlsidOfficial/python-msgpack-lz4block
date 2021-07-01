@@ -77,4 +77,9 @@ namespace msgpackWithLz4
 }
 ```
 
+## Dependencies:
 
+This library depends on:
+
+- [msgpack](https://github.com/msgpack/msgpack-python) : to deserialize the msgpack structure
+- [lz4](https://github.com/python-lz4/python-lz4) : to decompress the lz4 data
