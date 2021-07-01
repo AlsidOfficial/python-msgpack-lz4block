@@ -1,4 +1,5 @@
 from setuptools import find_packages, setup
+
 setup(
     name='python-msgpack-lz4block',
     packages=find_packages(),
@@ -7,4 +8,8 @@ setup(
                 'compression.',
     author='Alsid',
     license='MIT',
+    install_requires=[
+        'msgpack',
+        'lz4'
+    ],
 )
