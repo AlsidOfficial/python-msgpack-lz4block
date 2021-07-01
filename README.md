@@ -6,7 +6,7 @@ This project has been created to address [this issue](https://github.com/neuecc/
 
 ## Installation
 
-- git clone this repo
+- Download the [latest release](https://github.com/AlsidOfficial/python-msgpack-lz4block/releases/latest)
 - run setup.py install :
 
 ```
