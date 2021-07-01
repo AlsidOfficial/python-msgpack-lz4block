@@ -30,7 +30,7 @@ Lz4BlockArray compression.
 [99, 'hoge', 'huga']
 ```
 
-- We successfully deserialized the data ! It was generated using the above c# code
+- We successfully deserialized the data that was generated using the above c# code
 
 ```c#
 using MessagePack;
