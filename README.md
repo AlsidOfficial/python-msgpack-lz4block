@@ -6,11 +6,9 @@ This project has been created to address [this issue](https://github.com/neuecc/
 
 ## Installation
 
-- Download the [latest release](https://github.com/AlsidOfficial/python-msgpack-lz4block/releases/latest)
-- run setup.py install :
-
-```
-python setup.py install
+- run the above command:
+```shell
+pip install msgpack-lz4block
 ```
 
 ## Usage
@@ -33,7 +31,8 @@ Lz4BlockArray compression.
 - We got the values... but we still miss the keys. The keys are not serialized in order to optimize the data usage. We can provide the key mapping as above, we get a beautiful key/value dict:
 
 ```python
->>> msgpack_lz4block.deserialize(b'\x92\xd4b&\xc6\x00\x00\x00(\xf0\x17\x94 \xa8Perceval\x92\xaeOn en a gros !*\xa9de Galles', key_map=['Age', 'FirstName', ('MySubObj', ['Quote', 'MyInt']), 'LastName'])
+>>> key_map = ['Age', 'FirstName', ('MySubObj', ['Quote', 'MyInt']), 'LastName']
+>>> msgpack_lz4block.deserialize(b'\x92\xd4b&\xc6\x00\x00\x00(\xf0\x17\x94 \xa8Perceval\x92\xaeOn en a gros !*\xa9de Galles', key_map=key_map)
 {'Age': 32, 'FirstName': 'Perceval', 'MySubObj': {'Quote': 'On en a gros !', 'MyInt': 42}, 'LastName': 'de Galles'}
 ```
 
