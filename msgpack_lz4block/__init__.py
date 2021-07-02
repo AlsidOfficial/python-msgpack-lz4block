@@ -2,6 +2,23 @@ import msgpack
 import lz4.block
 
 
+def __map_obj(obj, key_map):
+    if not isinstance(key_map, list):
+        raise Exception('The key_map should be a list')
+    elif len(obj) != len(key_map):
+        raise Exception(
+            'The key_map list has length {} whereas the object has length {}'.format(len(key_map), len(obj)))
+    else:
+        dict_obj = {}
+        for index in range(0, len(key_map)):
+            key = key_map[index]
+            if isinstance(key, str):
+                dict_obj[key] = obj[index]
+            else:
+                dict_obj[key[0]] = __map_obj(obj[index], key[1])
+        return dict_obj
+
+
 def deserialize(bytes_data, key_map=None, buffer_size=100 * 1024 * 1024):
     """
        Deserialize the bytes array data outputted by the MessagePack-CSharp lib using using lz4block compression
@@ -18,13 +35,5 @@ def deserialize(bytes_data, key_map=None, buffer_size=100 * 1024 * 1024):
             decompressed += lz4.block.decompress(data, uncompressed_size=buffer_size)
     obj = msgpack.unpackb(decompressed)
     if key_map is not None:
-        if not isinstance(key_map, list):
-            raise Exception('The key_map should be a list')
-        elif len(obj) != len(key_map):
-            raise Exception('The key_map list should be the same length has the object')
-        else:
-            dict_obj = {}
-            for index in range(0, len(key_map)):
-                dict_obj[key_map[index]] = obj[index]
-            return dict_obj
+        return __map_obj(obj, key_map)
     return obj
