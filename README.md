@@ -6,11 +6,9 @@ This project has been created to address [this issue](https://github.com/neuecc/
 
 ## Installation
 
-- Download the [latest release](https://github.com/AlsidOfficial/python-msgpack-lz4block/releases/latest)
-- run setup.py install :
-
-```
-python setup.py install
+- run the above command:
+```shell
+pip install msgpack-lz4block
 ```
 
 ## Usage
