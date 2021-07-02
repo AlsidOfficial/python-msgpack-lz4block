@@ -12,5 +12,6 @@ setup(
         'msgpack',
         'lz4'
     ],
+    url='https://github.com/AlsidOfficial/python-msgpack-lz4block',
     download_url='https://github.com/AlsidOfficial/python-msgpack-lz4block/archive/refs/tags/v0.2.2.tar.gz'
 )
