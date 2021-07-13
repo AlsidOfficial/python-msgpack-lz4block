@@ -1,5 +1,7 @@
 import msgpack
 import lz4.block
+from msgpack.ext import Timestamp, ExtType
+import re
 
 
 def __map_obj(obj, key_map):
@@ -19,6 +21,42 @@ def __map_obj(obj, key_map):
         return dict_obj
 
 
+PATTERN_1 = re.compile(
+    rb'\xd9jSystem.Object\[\], System.Private.CoreLib, Version=[0-9][0-9.]*, Culture=neutral, PublicKeyToken=7cec85d7bea7798e.*?\xd9.(?P<payload>.*)')
+
+
+def ext_hook(code, data):
+    if code == 100:
+        for k in [
+            b'\xd9jSystem.Object[], System.Private.CoreLib, Version=5.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e\x91\xa6',
+            b'\xd9jSystem.Object[], System.Private.CoreLib, Version=5.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e\x91\xa4']:
+            if data.startswith(k):
+                decoded = data[len(k):]
+                return decoded.decode()
+        for k in [
+            b'\xd9jSystem.Object[], System.Private.CoreLib, Version=5.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e\x92\xa3',
+            b'\xd9jSystem.Object[], System.Private.CoreLib, Version=5.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e\x94\xa3',
+            b'\xd9jSystem.Object[], System.Private.CoreLib, Version=5.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e\x93\xa3']:
+            if data.startswith(k):
+                decoded = [d.decode() for d in re.split(b'\xa5|\xa6|\xb4|\xa4|\xa9', data[len(k):]) if d != b'']
+                return decoded
+        match = PATTERN_1.search(data)
+        if match is not None:
+            payload = match.group('payload')
+            decoded = [d.decode() for d in re.split(b'\xd9.', payload) if d != b'']
+            return decoded
+    return ExtType(code, data)
+
+
+def jsonify(data):
+    if isinstance(data, Timestamp):
+        return data.to_datetime().strftime('%Y-%m-%dT%H:%M:%fZ')
+    elif isinstance(data, list):
+        for i in range(0, len(data)):
+            data[i] = jsonify(data[i])
+    return data
+
+
 def deserialize(bytes_data, key_map=None, buffer_size=100 * 1024 * 1024):
     """
        Deserialize the bytes array data outputted by the MessagePack-CSharp lib using using lz4block compression
@@ -33,7 +71,8 @@ def deserialize(bytes_data, key_map=None, buffer_size=100 * 1024 * 1024):
     for data in deserialized:
         if isinstance(data, bytes):
             decompressed += lz4.block.decompress(data, uncompressed_size=buffer_size)
-    obj = msgpack.unpackb(decompressed)
+    obj = msgpack.unpackb(decompressed, ext_hook=ext_hook, raw=False)
+    obj = jsonify(obj)
     if key_map is not None:
         return __map_obj(obj, key_map)
     return obj
