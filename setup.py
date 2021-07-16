@@ -6,7 +6,7 @@ here = pathlib.Path(__file__).parent.resolve()
 # Get the long description from the README file
 long_description = (here / 'README.md').read_text(encoding='utf-8')
 
-version = '0.2.4'
+version = '0.2.5'
 
 setup(
     name='msgpack-lz4block',
