@@ -32,7 +32,7 @@ def ext_hook(code, data):
             b'\xd9jSystem.Object[], System.Private.CoreLib, Version=5.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e\x91\xa4']:
             if data.startswith(k):
                 decoded = data[len(k):]
-                return decoded.decode()
+                return [decoded.decode()]
         for k in [
             b'\xd9jSystem.Object[], System.Private.CoreLib, Version=5.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e\x92\xa3',
             b'\xd9jSystem.Object[], System.Private.CoreLib, Version=5.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e\x94\xa3',
